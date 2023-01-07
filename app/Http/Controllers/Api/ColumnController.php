@@ -19,7 +19,6 @@ class ColumnController extends Controller
      */
     public function index(Request $request)
     {
-        dd($request->user()->columns->max('order'));
         return TrelloResource::collection($request->user()->columns);
     }
 
