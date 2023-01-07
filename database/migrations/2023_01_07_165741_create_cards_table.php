@@ -20,7 +20,7 @@ return new class extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('title');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->integer('order');
             $table->softDeletes();
             $table->timestamps();
