@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\TrelloResource;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Column;
 use App\Http\Requests\StoreColumnRequest;
 use App\Http\Requests\UpdateColumnRequest;
@@ -11,11 +14,13 @@ class ColumnController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        dd($request->user()->columns->max('order'));
+        return TrelloResource::collection($request->user()->columns);
     }
 
     /**
@@ -26,18 +31,13 @@ class ColumnController extends Controller
      */
     public function store(StoreColumnRequest $request)
     {
-        //
-    }
+        $order = $request->user()->columns->max('order')+1 ?? 1;
+        $column = $request->user()->columns()->create([
+            'title' => $request->title,
+            'order' => $order
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Column  $column
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Column $column)
-    {
-        //
+        return Request::success('Column created successfully', $column);
     }
 
     /**

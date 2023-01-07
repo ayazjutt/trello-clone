@@ -21,4 +21,8 @@ Route::middleware(['auth:api'])->group(function () {
 
     Route::get('/user/refresh-token', [\App\Http\Controllers\Api\ApiTokenController::class, 'update'])->name('refresh-token');
 
+    // Columns CRUD
+    Route::get('/lists', [\App\Http\Controllers\Api\ColumnController::class, 'index'])->name('lists.index');
+    Route::post('/lists/create', [\App\Http\Controllers\Api\ColumnController::class, 'store'])->name('lists.store');
+
 });

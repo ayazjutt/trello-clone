@@ -23,6 +23,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        \Request::macro('success', function ($msg, $data) {
+            \Request::json([
+                "success" => true,
+                "msg" => $msg,
+                "data" => $data
+            ]);
+        });
+
+        \Request::macro('fail', function ($msg, $data) {
+            \Request::json([
+                "success" => false,
+                "msg" => $msg,
+            ]);
+        });
     }
 }
