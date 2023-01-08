@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\ColumnController;
+use App\Http\Controllers\Api\CardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +25,12 @@ Route::middleware(['auth:api'])->group(function () {
 
     // Columns CRUD
     Route::get('/lists', [\App\Http\Controllers\Api\ColumnController::class, 'index'])->name('lists.index');
-    Route::post('/lists/create', [\App\Http\Controllers\Api\ColumnController::class, 'store'])->name('lists.store');
+    Route::post('/lists', [\App\Http\Controllers\Api\ColumnController::class, 'store'])->name('lists.store');
+    Route::post('/lists/{id}', [\App\Http\Controllers\Api\ColumnController::class, 'update'])->name('lists.update');
+    Route::post('/lists/delete/{id}', [\App\Http\Controllers\Api\ColumnController::class, 'destroy'])->name('lists.update');
 
+//    Route::resources([
+//        'lists' => ColumnController::class,
+//        'cards' => CardController::class,
+//    ]);
 });

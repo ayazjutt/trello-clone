@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\TrelloResource;
+use App\Http\Services\ColumnService;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Column;
@@ -19,24 +20,23 @@ class ColumnController extends Controller
      */
     public function index(Request $request)
     {
-        return TrelloResource::collection($request->user()->columns);
+        return TrelloResource::collection((new ColumnService())->getAll($request));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \App\Http\Requests\StoreColumnRequest  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreColumnRequest $request)
     {
-        $order = $request->user()->columns->max('order')+1 ?? 1;
-        $column = $request->user()->columns()->create([
-            'title' => $request->title,
-            'order' => $order
-        ]);
-
-        return Request::success('Column created successfully', $column);
+        $column = (new ColumnService())->store($request);
+        return response()->json([
+            "success" => true,
+            "msg" => 'Column created successfully',
+            "data" => $column
+        ], 201);
     }
 
     /**
@@ -44,21 +44,32 @@ class ColumnController extends Controller
      *
      * @param  \App\Http\Requests\UpdateColumnRequest  $request
      * @param  \App\Models\Column  $column
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateColumnRequest $request, Column $column)
+    public function update(UpdateColumnRequest $request, $id)
     {
-        //
+        $column = Column::findOrFail($id);
+        $column = (new ColumnService())->update($request, $column);
+        return response()->json([
+            "success" => true,
+            "msg" => 'Column updated successfully',
+            "data" => $column
+        ],201);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Column  $column
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Column $column)
+    public function destroy($id)
     {
-        //
+        $column = Column::findOrFail($id);
+        (new ColumnService())->delete($column);
+        return response()->json([
+            "success" => true,
+            "msg" => 'Column deleted successfully',
+        ],201);
     }
 }

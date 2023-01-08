@@ -12,4 +12,8 @@ class Column extends Model
     use SoftDeletes;
 
     protected $fillable = ['user_id', 'title', 'order'];
+
+    public function cards() {
+        return $this->hasMany(Card::class)->orderBy('order');
+    }
 }
