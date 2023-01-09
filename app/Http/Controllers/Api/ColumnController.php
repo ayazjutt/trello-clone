@@ -32,6 +32,7 @@ class ColumnController extends Controller
     public function store(StoreColumnRequest $request)
     {
         $column = (new ColumnService())->store($request);
+        $column->cards = [];
         return response()->json([
             "success" => true,
             "msg" => 'Column created successfully',
