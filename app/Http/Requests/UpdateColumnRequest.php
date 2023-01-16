@@ -26,7 +26,7 @@ class UpdateColumnRequest extends FormRequest
     public function rules()
     {
         return [
-            'title' => 'required',
+            'title' => 'nullable',
             'order' => 'nullable|numeric',
         ];
     }

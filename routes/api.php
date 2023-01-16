@@ -29,6 +29,13 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/lists/{id}', [\App\Http\Controllers\Api\ColumnController::class, 'update'])->name('lists.update');
     Route::post('/lists/delete/{id}', [\App\Http\Controllers\Api\ColumnController::class, 'destroy'])->name('lists.update');
 
+    // Cards CRUD
+    Route::get('/list-cards', [\App\Http\Controllers\Api\CardController::class, 'listCards'])->name('cards.listCards');
+    Route::get('/cards', [\App\Http\Controllers\Api\CardController::class, 'index'])->name('cards.index');
+    Route::post('/cards', [\App\Http\Controllers\Api\CardController::class, 'store'])->name('cards.store');
+    Route::post('/cards/{id}', [\App\Http\Controllers\Api\CardController::class, 'update'])->name('cards.update');
+    Route::post('/cards/delete/{id}', [\App\Http\Controllers\Api\CardController::class, 'destroy'])->name('cards.update');
+
 //    Route::resources([
 //        'lists' => ColumnController::class,
 //        'cards' => CardController::class,

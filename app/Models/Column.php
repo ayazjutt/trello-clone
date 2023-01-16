@@ -14,6 +14,6 @@ class Column extends Model
     protected $fillable = ['user_id', 'title', 'order'];
 
     public function cards() {
-        return $this->hasMany(Card::class)->orderBy('order');
+        return $this->hasMany(Card::class)->orderBy('order', 'asc');
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class StoreCardRequest extends FormRequest
 {
@@ -13,7 +15,7 @@ class StoreCardRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +26,22 @@ class StoreCardRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'title' => 'required',
+            'column_id' => 'required|exists:columns,id',
         ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @param Validator $validator
+     */
+    public function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            'success'   => false,
+            'message'   => 'Validation errors',
+            'data'      => $validator->errors()
+        ]));
     }
 }

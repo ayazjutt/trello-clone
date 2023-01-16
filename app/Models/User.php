@@ -43,6 +43,6 @@ class User extends Authenticatable
     ];
 
     public function columns() {
-        return $this->hasMany(Column::class);
+        return $this->hasMany(Column::class)->orderBy('order', 'asc');
     }
 }

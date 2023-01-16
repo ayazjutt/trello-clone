@@ -45,7 +45,8 @@ class ColumnService
      */
     public function update($request, $column)
     {
-        $column->title = $request->title;
+        if (!empty($request->title))
+            $column->title = $request->title;
 
         if (!empty($request->order))
             $column->order = $request->order;
@@ -74,8 +75,16 @@ class ColumnService
 
     public function syncColumnsOrder($order, $column)
     {
-        DB::statement("SET @number = ".$order.";");
-        DB::statement("update `columns` SET `order`= (@number := @number + 1) WHERE `order` >= ".$order." and id <> ".$column->id." and user_id = ".$column->user_id.";");
+        $columns = Column::where('user_id', $column->user_id)
+            ->where('order','>=', $order)
+            ->where('id','<>', $column->id)
+            ->orderBy('order', 'asc')
+            ->get();
+        foreach ($columns as $column){
+            $order++;
+            $column->order = $order;
+            $column->save();
+        }
     }
 
     public function resetUsersColumnsOrder($user_id)
